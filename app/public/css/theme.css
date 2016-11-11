@@ -9,8 +9,9 @@
 
 #container {
   bottom: 0;
-  position: absolute;
+  position: fixed;
   width: 100%;
+  top: auto !important;
 }
 
 /* nav */
@@ -50,14 +51,16 @@ nav img {
 /* columns */
 
 .column {
+}
+
+.column > div {
   height: 272px;
+  overflow-x: hidden;
 }
 
 .column.left {
   background-color: rgb(243, 243, 243);
   border-right: 1px solid rgb(163, 163, 163);
-  overflow-x: hidden;
-  overflow-y: visible;
   width: 199px;
 }
 
@@ -65,8 +68,10 @@ nav img {
   color: rgb(34, 34, 34);
   font-family: sans-serif;
   font-size: 12px;
+  height: 35px;
   line-height: 35px;
   padding-left: 12px;
+  white-space: nowrap;
 }
 
 .column.left li.disabled {

@@ -1,9 +1,9 @@
-
-
 $('#container').resizable({
-  alsoResize: '.column',
   handles: 'n',
-  minHeight: 300
+  minHeight: 300,
+  resize: function (event, ui) {
+    $('.column > div').height(ui.size.height - 28);
+  }
 });
 
 $('.column.left').resizable({ // ver el max width más adelante (seguro que será según el contenido de RC)
