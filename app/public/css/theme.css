@@ -9,9 +9,9 @@
 
 #container {
   bottom: 0;
-  position: fixed;
-  width: 100%;
+  position: absolute;
   top: auto !important;
+  width: 100%;
 }
 
 /* nav */
@@ -49,9 +49,6 @@ nav img {
 }
 
 /* columns */
-
-.column {
-}
 
 .column > div {
   height: 272px;
