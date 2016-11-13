@@ -10,6 +10,6 @@ app.get('/', function (req, res) {
   res.render(__dirname + '/app/views/index', {});
 });
 
-app.listen(8000, function () {
-  console.log('server listening on port 8000');
+app.listen(80, function () {
+  console.log('server listening on port 80');
 });
