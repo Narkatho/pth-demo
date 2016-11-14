@@ -39,22 +39,31 @@
           <li class="clear"></li>
         </ul>
       </nav>
-      <section class="column left">
-        <div>
-          <ul>
-            <li data-optionID="1">XXE</li>
-            <li data-optionID="2">Leak de info privada por JSONP</li>
-            <li data-optionID="3">Leak de info privada por JS</li>
-            <li data-optionID="4">Detectar inyección CSV</li>
-            <li class="disabled">Disabled 1</li>
-            <li class="disabled">Disabled 2</li>
-            <li class="disabled">Disabled 3</li>
-            <li class="disabled">Disabled 4</li>
-          </ul>
-        </div>
+      <section id="login">
+        <img src="img/logo.png">
+        <br><br>
+        <form>
+          <input type="text" name="username" placeholder="Username">
+          <br><br>
+          <input type="password" name="password" placeholder="Password">
+        </form>
+        <br>
+        <button type="submit">Login</button>
       </section>
-      <section class="column right">
-        <div></div>
+      <section id="columns">
+        <div class="column left">
+          <div>
+            <ul>
+              <li class="disabled">Disabled 1</li>
+              <li class="disabled">Disabled 2</li>
+              <li class="disabled">Disabled 3</li>
+              <li class="disabled">Disabled 4</li>
+            </ul>
+          </div>
+        </div>
+        <div class="column right">
+          <div></div>
+        </div>
       </section>
       <div class="clear"></div>
     </div>
