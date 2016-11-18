@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/theme.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script
       src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -54,6 +55,13 @@
         <div class="column left">
           <div>
             <ul>
+              <li data-optionid="1">
+                <i class="material-icons secure">verified_user</i>
+                <i class="material-icons vulnerable">warning</i> XXE
+              </li>
+              <li data-optionid="2">Leak de info privada por JSONP</li>
+              <li data-optionid="3">Leak de info privada por JS</li>
+              <li data-optionid="4">Detectar inyección por CSV</li>
               <li class="disabled">Disabled 1</li>
               <li class="disabled">Disabled 2</li>
               <li class="disabled">Disabled 3</li>
@@ -62,10 +70,151 @@
           </div>
         </div>
         <div class="column right">
-          <div></div>
+          <div>
+            <ul> <!-- XXE -->
+              <li> <!-- S1 -->
+                Hemos detectado que el endpoint <strong>POST http://example.com/core/feeds/</strong> recibe un XML como entrada. Esto puede representar un riesgo muy grave para tu aplicación web si el XML es procesado en backend y luego parte de éste es enviado a algún output que el usuario puede ver directamente. De esta forma un atacante podría robar archivos sensibles desde tus servidores tales como <strong>/etc/passwd</strong> o el código fuente de tu aplicación web.
+                <br>
+                <br>
+                ¿Tú endpoint procesa este XML de entrada y luego algún resultante es enviado como output para el usuario?
+                <br>
+                <br>
+                <button value="1">Sí</button><button value="2">No</button>
+              </li>
+              <li> <!-- S2 B1 -->
+                Muy bien. Debes modificar el XML que estás enviando al endpoint <strong>POST http://example.com/core/feeds/</strong> y debe contener la siguiente información:
+                <br>
+                <br>
+                1) En la cabecera del XML debes definir una variable XML que se llenará con el valor del archivo <strong>/etc/passwd</strong> (o algún otro archivo de tu elección)
+                <br>
+                <br>
+                <code>
+                  &lt;!DOCTYPE doc [
+                  <br>
+                  &nbsp;&nbsp;&lt;!ENTITY xxe SYSTEM &quot;file:///etc/passwd&quot; &gt;]&gt;
+                </code>
+                <br>
+                <br>
+                El fragmento debe colocarse justo después de abrir el XML, ejemplo:
+                <br>
+                <br>
+                <code>&lt;?xml version=&quot;1.0&quot; ?&gt;</code>
+                <br>
+                <br>
+                2) En el cuerpo del XML, identifica alguno de los campos cuyo valor es luego replicado en el output que podrá ver el usuario y haz uso de la variable <strong>&amp;xxe;</strong> Ejemplo:
+                <br>
+                <br>
+                <code>&lt;content&gt;&amp;xxe;&lt;/content&gt;</code>
+                <br>
+                <br>
+                Una vez hecho esto revisa el output del usuario. Sí allí puedes ver reflejado el contenido del archivo <strong>/etc/passwd</strong> del servidor entonces tu aplicación web es vulnerable a XXE.
+                <br>
+                <br>
+                <button value="1">Sí es vulnerable</button><button value="2">No es vulnerable</button>
+              </li>
+              <li> <!-- S2 B2 -->
+                ¿Estás seguro que el XML no es procesado ni alguno de sus campos enviado al output de usuario?
+                <br>
+                <br>
+                <button value="1">Sí, y marcar como no vulnerable</button><button value="2">No, OK probemos</button>
+              </li>
+              <li> <!-- S3 -->
+                Entendido. Para resolver este bug necesitamos saber en qué lenguaje está escrito el código del endpoint <strong>POST http://example.com/core/feeds/?</strong>
+                <br>
+                <br>
+                Recomendamos revisar <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet" target="_blank">este link</a> para instrucciones sobre cómo resolver XXE para varios lenguajes.
+              </li>
+            </ul>
+            <ul> <!-- Leak de info privada por JSONP -->
+              <li> <!-- S1 -->
+                El endpoint <strong>GET http://examplecdn.com/js/script.js?callback=__smth__</strong> parece hacer uso del patrón JSONP. Si la información que transporta es privada entonces corres el riesgo de que dicha información pueda ser accedida por terceros sin autorización.
+                <br>
+                <br>
+                ¿La información que viaja en el response JSONP es privada?
+                <br>
+                <br>
+                <button value="1">Sí</button><button value="2">No</button>
+              </li>
+              <li> <!-- S2 B1 -->
+                El patrón JSONP no debe ser usado para procesar información privada pues puede ser llamado desde dominios arbitrarios de terceros. En el caso particular de esta llamada, cualquier dominio puede acceder a la información privada contenida en esta llamada simplemente agregando esta porción de HTML en su código fuente:
+                <br>
+                <br>
+                <code>&lt;script type=&rdquo;text/javascript&rdquo; src=&rdquo;http://examplecdn.com/js/script.js?callback=__smth__&rdquo;&gt;&lt;/script&gt;</code>
+                <br>
+                <br>
+                Para resolver este problema se recomienda dejar de hacer uso completamente del patrón JSONP y en su lugar retornar la información como un simple objeto JSON a través de una llamada AJAX. Esto debiese ser bastante sencillo si la información transportada en el JSONP no debe ser compartida con un dominio de terceros. Por otra parte, si resulta necesario compartir la información con otros dominios, igualmente se recomienda retornar un simple objeto JSON a través de una llamada AJAX, pero utilizando CORS para compartir la información con el dominio específico que debe tener acceso a ella.
+              </li>
+              <li> <!-- S2 B2 -->
+                ¿Estás seguro que la información que viaja en JSONP es privada y por lo tanto este patrón JSONP no supone un filtrado de información hacia terceros?
+                <br>
+                <br>
+                Información privada es todo tipo de información que un tercero, que no es propietario de dicha asignación, no debiese poder ver tal como PII (Personally Identifiable Information)
+                <br>
+                <br>
+                <button value="1">Sí, y marcar como no vulnerable</button><button value="2">No, la información sí es privada</button>
+              </li>
+            </ul>
+            <ul> <!-- Leak de info privada por JS -->
+              <li> <!-- S1 -->
+                El javascript <strong>GET http://example.com/static/nonlib.js</strong> es llamado desde un recurso privado. Resulta importante comprobar si esta llamada JS no transporta información privada. Por favor ejecuta el siguiente request que ayudará a comprobar si existe leak de información privada en este JS:
+                <br>
+                <br>
+                <span class="request">
+                  <span>&#9654;</span>&nbsp;<span>GET http://example.com/static/nonlib.js</span> <button>Run</button>
+                </span>
+              </li>
+            </ul>
+            <ul> <!-- Detectar inyección CSV -->
+              <li> <!-- S1 -->
+                We just saw a CSV file being downloaded. Does this file contain fields whose values are direct input from the user of your webapp?
+                <br>
+                <br>
+                <button value="1">Yes</button><button value="2">No</button>
+              </li>
+              <li> <!-- S2 B1 -->
+                OK. There’s a chance this endpoint can be used to build malicious CSV files. To test we need your help.
+                <br>
+                <br>
+                Please go to the formulary whose input is later shown as a field in this CSV field and enter this value:
+                <br>
+                <br>
+                <code>=1+1</code>
+                <br>
+                <br>
+                And save it. Then, go back to this endpoint and check that the CSV file shows this value too as a field.
+                <br>
+                <br>
+                <button value="1">Yes, it's there!</button><button value="2">No, it's not there</button>
+              </li>
+              <li> <!-- S2 B2 -->
+                You sure?
+                <br>
+                <br>
+                <button value="1">Yes, I’m sure</button><button value="2">No, I think some of these fields actually come directly from user input</button>
+              </li>
+              <li> <!-- S3 -->
+                Awesome! (or not? it depends on who’s looking :P) This little nasty bug can be used to inject malicious Excel commands in this CSV file and however gets to download it (maybe the boss herself??) will have a hard time on her computer.
+                <br>
+                <br>
+                So we need to fix this. The way to do it is simple: filter this CSV fields to escape initial “=” characters. That way they won’t execute as Excel formulas. Therefore if a field is
+                <br>
+                <br>
+                <code>=1+1</code>
+                <br>
+                <br>
+                then it should be sent as
+                <br>
+                <br>
+                <code>\=1+1</code>
+                <br>
+                <br>
+                Cool?
+              </li>
+            </ul>
+          </div>
         </div>
+        <div class="clear"></div>
       </section>
-      <div class="clear"></div>
     </div>
     <script src="js/script.js"></script>
   </body>

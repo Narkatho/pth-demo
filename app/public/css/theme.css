@@ -72,7 +72,7 @@ nav img {
   width: 152px;
 }
 
-/* columns */
+/* ---------- Columns ---------- */
 
 #columns {
   display: none;
@@ -82,6 +82,8 @@ nav img {
   height: 272px;
   overflow-x: hidden;
 }
+
+/* left */
 
 .column.left {
   background-color: rgb(243, 243, 243);
@@ -99,40 +101,83 @@ nav img {
   white-space: nowrap;
 }
 
+.column.left li.selected {
+  background-color: rgb(56, 121, 217);
+  color: white;
+}
+
 .column.left li.disabled {
   color: rgb(122, 122, 122);
 }
+
+.column.left i {
+  display: none;
+  font-size: 18px;
+}
+
+.column.left i.secure {
+  color: green;
+}
+
+.column.left i.vulnerable {
+  color: red;
+}
+
+/* right */
 
 .column.right {
   background-color: rgb(249, 249, 249);
   width: calc(100% - 200px);
 }
 
-.pth-message {
+.column.right ul {
+  display: none;
+}
+
+.column.right li {
   background-color: white;
   border-bottom: 1px solid rgb(230, 230, 230);
-  border-right: 1px solid rgb(230, 230, 230);
   color: rgb(34, 34, 34);
+  display: none;
   font-family: sans-serif;
   font-size: 12px;
   line-height: 16px;
-  padding: 10px 25px;
-  width: 749px;
+  padding: 20px 40px 10px 40px;
 }
 
-.pth-message > span {
+.column.right li:first-child {
+  display: block;
+}
+
+.column.right li strong {
   font-family: 'Open Sans', sans-serif;
 }
 
-.pth-message > span.code {
+.column.right li code {
   background-color: rgb(243, 243, 243);
 }
 
-.pth-message button:last-child {
+.column.right li button:last-child {
   margin-left: 10px;
 }
 
-/* general */
+.request {
+  background-color: rgb(243, 251, 255);
+  border-radius: 2px;
+  border: 1px solid rgb(129, 214, 253);
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  padding: 5px;
+}
+
+.request > span {
+  line-height: 25px;
+}
+
+.request textarea {
+}
+
+/* ---------- General ---------- */
 
 button {
   background: linear-gradient(to bottom, rgb(246, 246, 246) 0%, rgb(222, 222, 222) 100%);
