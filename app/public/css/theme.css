@@ -50,11 +50,10 @@ nav img {
 
 /* login */
 
-#login {
-  box-sizing: border-box;
+#login > div {
   height: 272px;
   overflow-x: hidden;
-  padding: 10px 0 10px 25px;
+  padding-left: 40px;
 }
 
 #login input {
@@ -70,6 +69,16 @@ nav img {
 
 #login button {
   width: 152px;
+}
+
+#login p {
+  text-align: center;
+  width: 174px;
+}
+
+#login a {
+  font-family: sans-serif;
+  font-size: 12px;
 }
 
 /* ---------- Columns ---------- */
@@ -96,8 +105,8 @@ nav img {
   font-family: sans-serif;
   font-size: 12px;
   height: 35px;
-  line-height: 35px;
   padding-left: 12px;
+  position: relative;
   white-space: nowrap;
 }
 
@@ -113,14 +122,20 @@ nav img {
 .column.left i {
   display: none;
   font-size: 18px;
+  line-height: 35px;
 }
 
-.column.left i.secure {
-  color: green;
+.column.left li:not(.selected) i.secure {
+  color: #43A047;
 }
 
-.column.left i.vulnerable {
-  color: red;
+.column.left li:not(.selected) i.vulnerable {
+  color: #E53935;
+}
+
+.column.left span {
+  position: absolute;
+  top: 12px;
 }
 
 /* right */
@@ -128,6 +143,35 @@ nav img {
 .column.right {
   background-color: rgb(249, 249, 249);
   width: calc(100% - 200px);
+}
+
+.alert {
+  border-bottom: 1px solid;
+  box-sizing: border-box;
+  color: rgb(34, 34, 34);
+  display: none;
+  font-family: sans-serif;
+  font-size: 12px;
+  height: 35px;
+  line-height: 36px;
+  padding-left: 40px;
+  position: relative;
+}
+
+.alert button {
+  position: absolute;
+  right: 40px;
+  top: 5px;
+}
+
+.alert.secure {
+  background-color: #C8E6C9;
+  border-color: #A5D6A7;
+}
+
+.alert.vulnerable {
+  background-color: #FFCDD2;
+  border-color: #EF9A9A;
 }
 
 .column.right ul {
@@ -159,22 +203,6 @@ nav img {
 
 .column.right li button:last-child {
   margin-left: 10px;
-}
-
-.request {
-  background-color: rgb(243, 251, 255);
-  border-radius: 2px;
-  border: 1px solid rgb(129, 214, 253);
-  display: inline-block;
-  font-family: 'Open Sans', sans-serif;
-  padding: 5px;
-}
-
-.request > span {
-  line-height: 25px;
-}
-
-.request textarea {
 }
 
 /* ---------- General ---------- */

@@ -41,15 +41,27 @@
         </ul>
       </nav>
       <section id="login">
-        <img src="img/logo.png">
-        <br><br>
-        <form>
-          <input type="text" name="username" placeholder="Username">
-          <br><br>
-          <input type="password" name="password" placeholder="Password">
-        </form>
-        <br>
-        <button type="submit">Login</button>
+        <div>
+          <br>
+          <img src="img/logo.png">
+          <br>
+          <br>
+          <form>
+            <input type="text" name="username" placeholder="Username">
+            <br>
+            <br>
+            <input type="password" name="password" placeholder="Password">
+          </form>
+          <br>
+          <button>Login</button>
+          <br>
+          <br>
+          <p>
+            <a href="" target="_blank">¿Olvidaste tu contraseña?</a>
+          </p>
+          <br>
+          <br>
+        </div>
       </section>
       <section id="columns">
         <div class="column left">
@@ -57,20 +69,49 @@
             <ul>
               <li data-optionid="1">
                 <i class="material-icons secure">verified_user</i>
-                <i class="material-icons vulnerable">warning</i> XXE
+                <i class="material-icons vulnerable">warning</i>
+                <span>XXE</span>
               </li>
-              <li data-optionid="2">Leak de info privada por JSONP</li>
-              <li data-optionid="3">Leak de info privada por JS</li>
-              <li data-optionid="4">Detectar inyección por CSV</li>
-              <li class="disabled">Disabled 1</li>
-              <li class="disabled">Disabled 2</li>
-              <li class="disabled">Disabled 3</li>
-              <li class="disabled">Disabled 4</li>
+              <li data-optionid="2">
+                <i class="material-icons secure">verified_user</i>
+                <i class="material-icons vulnerable">warning</i>
+                <span>Leak de info privada por JSONP</span>
+              </li>
+              <li data-optionid="3">
+                <i class="material-icons secure">verified_user</i>
+                <i class="material-icons vulnerable">warning</i>
+                <span>Leak de info privada por JS</span>
+              </li>
+              <li data-optionid="4">
+                <i class="material-icons secure">verified_user</i>
+                <i class="material-icons vulnerable">warning</i>
+                <span>Detectar inyección CSV</span>
+              </li>
+              <li class="disabled">
+                <span>Disabled 1</span>
+              </li>
+              <li class="disabled">
+                <span>Disabled 2</span>
+              </li>
+              <li class="disabled">
+                <span>Disabled 3</span>
+              </li>
+              <li class="disabled">
+                <span>Disabled 4</span>
+              </li>
             </ul>
           </div>
         </div>
         <div class="column right">
           <div>
+            <div class="alert secure">
+              Marcado como seguro
+              <button>Volver a probar</button>
+            </div>
+            <div class="alert vulnerable">
+              Marcado como vulnerable
+              <button>Volver a probar</button>
+            </div>
             <ul> <!-- XXE -->
               <li> <!-- S1 -->
                 Hemos detectado que el endpoint <strong>POST http://example.com/core/feeds/</strong> recibe un XML como entrada. Esto puede representar un riesgo muy grave para tu aplicación web si el XML es procesado en backend y luego parte de éste es enviado a algún output que el usuario puede ver directamente. De esta forma un atacante podría robar archivos sensibles desde tus servidores tales como <strong>/etc/passwd</strong> o el código fuente de tu aplicación web.
@@ -159,9 +200,6 @@
                 El javascript <strong>GET http://example.com/static/nonlib.js</strong> es llamado desde un recurso privado. Resulta importante comprobar si esta llamada JS no transporta información privada. Por favor ejecuta el siguiente request que ayudará a comprobar si existe leak de información privada en este JS:
                 <br>
                 <br>
-                <span class="request">
-                  <span>&#9654;</span>&nbsp;<span>GET http://example.com/static/nonlib.js</span> <button>Run</button>
-                </span>
               </li>
             </ul>
             <ul> <!-- Detectar inyección CSV -->

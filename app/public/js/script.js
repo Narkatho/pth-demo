@@ -2,7 +2,7 @@ $('#container').resizable({
   handles: 'n',
   minHeight: 300,
   resize: function (event, ui) {
-    $('.column > div').height(ui.size.height - 28);
+    $('#login > div, .column > div').height(ui.size.height - 28);
   }
 });
 
@@ -23,13 +23,33 @@ $('#login button').click(function () {
 
 var options = {
   markAsSecure: function () {
+    $(`.column.left li[data-optionid="${this.activeOptionID}"] span`).css('left', 35);
     $(`.column.left li[data-optionid="${this.activeOptionID}"] i.secure`).show();
+    this[this.activeOptionID].secure = true;
+    $('.alert.secure').show();
   },
   markAsVulnerable: function () {
+    $(`.column.left li[data-optionid="${this.activeOptionID}"] span`).css('left', 35);
     $(`.column.left li[data-optionid="${this.activeOptionID}"] i.vulnerable`).show();
+    this[this.activeOptionID].vulnerable = true;
+    $('.alert.vulnerable').show();
   },
   restore: function () {
-    delete this[this.activeOptionID];
+    $(`.column.left li[data-optionid="${this.activeOptionID}"] span`).css('left', 'auto');
+    var activeOption = this[this.activeOptionID];
+
+    if (activeOption.secure) {
+      $(`.column.left li[data-optionid="${this.activeOptionID}"] i.secure`).hide();
+      activeOption.secure = false;
+      $('.alert.secure').hide();
+    } else {
+      $(`.column.left li[data-optionid="${this.activeOptionID}"] i.vulnerable`).hide();
+      activeOption.vulnerable = false;
+      $('.alert.vulnerable').hide();
+    }
+
+    activeOption.$el.html(activeOption.defaultHtml);
+    activeOption.status = 1;
   }
 };
 
@@ -38,7 +58,8 @@ $(document).on('click', '.column.left li:not(.selected):not(.disabled)', functio
 
   if (options.activeOptionID) {
     $(`.column.left li[data-optionid="${options.activeOptionID}"]`).removeClass('selected');
-
+    if (options[options.activeOptionID].secure) $('.alert.secure').hide();
+    else if (options[options.activeOptionID].vulnerable) $('.alert.vulnerable').hide();
     options[options.activeOptionID].isActive = false;
     options[options.activeOptionID].$el.hide();
   }
@@ -46,9 +67,15 @@ $(document).on('click', '.column.left li:not(.selected):not(.disabled)', functio
   var optionID = $(this).data('optionid');
   options.activeOptionID = optionID;
 
-  if (!options.hasOwnProperty(optionID)) {
+  if (options.hasOwnProperty(optionID)) {
+    if (options[optionID].secure) $('.alert.secure').show();
+    else if (options[optionID].vulnerable) $('.alert.vulnerable').show();
+  } else {
+    var $el = $(`.column.right ul:nth-child(${optionID + 2})`);
+
     options[optionID] = {
-      $el: $(`.column.right ul:nth-child(${optionID})`),
+      $el: $el,
+      defaultHtml: $el.html(),
       status: 1
     };
   }
@@ -57,7 +84,11 @@ $(document).on('click', '.column.left li:not(.selected):not(.disabled)', functio
   options[optionID].$el.show();
 });
 
-$(document).on('click', '.column.right button', function () {
+$('.alert button').click(function () {
+  options.restore();
+});
+
+$(document).on('click', '.column.right li > button', function () {
   $(this).parent().find('button').prop('disabled', true);
   $(this).addClass('selected');
   var activeOption = options[options.activeOptionID];
