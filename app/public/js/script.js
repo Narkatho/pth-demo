@@ -110,81 +110,84 @@ $(document).on('click', '.column.right li button', function () {
   $(this).parent().find('button').prop('disabled', true);
   $(this).addClass('selected');
   var activeOption = options[options.activeOptionID];
+  var self = this;
 
-  switch (options.activeOptionID) {
-    case 1: // XXE
-    case 4: // Detectar inyección CSV
-      switch (activeOption.status) {
-        case 1:
-          activeOption.status = 2;
-          activeOption.path = $(this).val();
-          activeOption.$el.children().eq($(this).val()).show();
-          break;
-        case 2:
-          if (activeOption.path == 1) {
-            if ($(this).val() == 1) {
-              options.markAsVulnerable();
-              activeOption.$el.children().last().show();
-            } else options.markAsSecure();
-          }
-          else {
-            if ($(this).val() == 1) options.markAsSecure();
-            else {
-              activeOption.path = 1;
-              activeOption.$el.children().eq(1).insertAfter($(this).parent()).show();
+  setTimeout(function () {
+    switch (options.activeOptionID) {
+      case 1: // XXE
+      case 4: // Detectar inyección CSV
+        switch (activeOption.status) {
+          case 1:
+            activeOption.status = 2;
+            activeOption.path = $(self).val();
+            activeOption.$el.children().eq($(self).val()).show();
+            break;
+          case 2:
+            if (activeOption.path == 1) {
+              if ($(self).val() == 1) {
+                options.markAsVulnerable();
+                activeOption.$el.children().last().show();
+              } else options.markAsSecure();
             }
-          }
+            else {
+              if ($(self).val() == 1) options.markAsSecure();
+              else {
+                activeOption.path = 1;
+                activeOption.$el.children().eq(1).insertAfter($(self).parent()).show();
+              }
+            }
 
-          break;
-      }
+            break;
+        }
 
-      break;
-    case 2: // Leak de info privada por JSONP
-      switch (activeOption.status) {
-        case 1:
-          $(this).val() == 1 ? options.markAsVulnerable() : activeOption.status = 2;
-          activeOption.$el.children().eq($(this).val()).show();
-          break;
-        case 2:
-          if ($(this).val() == 1) options.markAsSecure();
-          else {
-            options.markAsVulnerable();
-            activeOption.$el.children().eq(1).insertAfter($(this).parent()).show();
-          }
+        break;
+      case 2: // Leak de info privada por JSONP
+        switch (activeOption.status) {
+          case 1:
+            $(self).val() == 1 ? options.markAsVulnerable() : activeOption.status = 2;
+            activeOption.$el.children().eq($(self).val()).show();
+            break;
+          case 2:
+            if ($(self).val() == 1) options.markAsSecure();
+            else {
+              options.markAsVulnerable();
+              activeOption.$el.children().eq(1).insertAfter($(self).parent()).show();
+            }
 
-          break;
-      }
+            break;
+        }
 
-      break;
-    case 3: // Leak de info privada por JS
-      switch (activeOption.status) {
-        case 1:
-          $(this).val() == 1 ? options.markAsSecure() : activeOption.status = 2;
-          activeOption.$el.children().first().find('textarea').prop('disabled', true);
-          activeOption.$el.children().eq($(this).val()).show();
-          break;
-        case 2:
-          if ($(this).val() == 1) {
-            options.markAsVulnerable();
-            activeOption.$el.children().eq(3).show();
-          } else {
-            activeOption.status = 3;
-            activeOption.$el.children().eq(4).show();
-          }
+        break;
+      case 3: // Leak de info privada por JS
+        switch (activeOption.status) {
+          case 1:
+            $(self).val() == 1 ? options.markAsSecure() : activeOption.status = 2;
+            activeOption.$el.children().first().find('textarea').prop('disabled', true);
+            activeOption.$el.children().eq($(self).val()).show();
+            break;
+          case 2:
+            if ($(self).val() == 1) {
+              options.markAsVulnerable();
+              activeOption.$el.children().eq(3).show();
+            } else {
+              activeOption.status = 3;
+              activeOption.$el.children().eq(4).show();
+            }
 
-          break;
-        case 3:
-          if ($(this).val() == 1) options.markAsSecure();
-          else {
-            options.markAsVulnerable();
-            activeOption.$el.children().eq(3).insertAfter($(this).parent()).show();
-          }
+            break;
+          case 3:
+            if ($(self).val() == 1) options.markAsSecure();
+            else {
+              options.markAsVulnerable();
+              activeOption.$el.children().eq(3).insertAfter($(self).parent()).show();
+            }
 
-          break;
-      }
+            break;
+        }
 
-      break;
-  }
+        break;
+    }
+  }, Math.floor(Math.random() * ((1500 - 800) + 1) + 800));
 });
 
 $(document).on('click', '.request > span:nth-child(1)', function () {
