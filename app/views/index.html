@@ -53,7 +53,10 @@
             <input type="password" name="password" placeholder="Password">
           </form>
           <br>
-          <button>Login</button>
+          <button value="1">Login (habilitada)</button>
+          <br>
+          <br>
+          <button value="2">Login (no habilitada)</button>
           <br>
           <br>
           <p>
@@ -67,22 +70,22 @@
         <div class="column left">
           <div>
             <ul>
-              <li data-optionid="1">
+              <li class="hide" data-optionid="1">
                 <i class="material-icons secure">verified_user</i>
                 <i class="material-icons vulnerable">warning</i>
                 <span>XXE</span>
               </li>
-              <li data-optionid="2">
+              <li class="hide" data-optionid="2">
                 <i class="material-icons secure">verified_user</i>
                 <i class="material-icons vulnerable">warning</i>
                 <span>Leak de info privada por JSONP</span>
               </li>
-              <li data-optionid="3">
+              <li class="hide" data-optionid="3">
                 <i class="material-icons secure">verified_user</i>
                 <i class="material-icons vulnerable">warning</i>
                 <span>Leak de info privada por JS</span>
               </li>
-              <li data-optionid="4">
+              <li class="hide" data-optionid="4">
                 <i class="material-icons secure">verified_user</i>
                 <i class="material-icons vulnerable">warning</i>
                 <span>Detectar inyección CSV</span>
@@ -200,6 +203,29 @@
                 El javascript <strong>GET http://example.com/static/nonlib.js</strong> es llamado desde un recurso privado. Resulta importante comprobar si esta llamada JS no transporta información privada. Por favor ejecuta el siguiente request que ayudará a comprobar si existe leak de información privada en este JS:
                 <br>
                 <br>
+                <span class="request">
+                  <span>&#9654;</span>&nbsp;<span>GET http://example.com/static/nonlib.js</span><button value="2">Run (el js no es igual)</button><button value="1">Run (el js es igual)</button>
+                  <div class="clear"></div>
+                  <textarea rows="12" spellcheck="false">HEADERS:&#13;&#10;&#13;&#10;Host: example.com&#13;&#10;Accept-Encoding: gzip, algo&#13;&#10;Accept: application/json&#13;&#10;Cache-Control: max-age = 0&#13;&#10;Cookie: algo, algo&#13;&#10;Connection: keep-alive&#13;&#10;&#13;&#10;CONTENT:&#13;&#10;&#13;&#10;{'id': 1, 'algo': 'algo'}</textarea>
+                </span>
+              </li>
+              <li> <!-- S2 B1-->
+                El javascript no filtra información privada. El JS es seguro en este sentido.
+              </li>
+              <li> <!-- S2 B3 -->
+                El javascript <strong>GET http://example.com/static/nonlib.js</strong> retorna distinta información cuando el request está loggeado y cuando no lo está: esto es un signo de que el javascript está filtrando información privada ¿Es esto correcto?
+                <br>
+                <br>
+                <button value="1">Sí, la información contenida por este JS es privada</button><button value="2">No, la información contenida en este JS NO es privada</button>
+              </li>
+              <li> <!-- S3 B1 -->
+                Los JS nunca deben contener información privada. Si necesitas retornar información autentificada para un usuario dado, te recomendamos hacerlo a través de una llamada AJAX que retorne un simple objeto JSON.
+              </li>
+              <li> <!-- S3 B2 -->
+                ¿Estás seguro?
+                <br>
+                <br>
+                <button value="1">Sí, estoy seguro</button><button value="2">No, creo que la información sí es privada</button>
               </li>
             </ul>
             <ul> <!-- Detectar inyección CSV -->
@@ -253,6 +279,10 @@
         </div>
         <div class="clear"></div>
       </section>
+    </div>
+    <div id="unauthorized">
+      <br>
+      <i class="material-icons">pan_tool</i><span>Power to Hack no tiene permiso para analizar este dominio.</span>
     </div>
     <script src="js/script.js"></script>
   </body>

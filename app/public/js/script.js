@@ -15,11 +15,29 @@ $('.column.left').resizable({
 });
 
 $('#login button').click(function () {
-  $('#login').hide();
-  $('#columns').show();
-});
+  if ($(this).val() == 1) {
+    $('#login').hide();
+    $('#columns').show();
 
-//----------------------------------------------------------------------------------------------- pulido
+    setTimeout(function () {
+      $('.column.left li:nth-child(1)').show();
+    }, 1500);
+
+    setTimeout(function () {
+      $('.column.left li:nth-child(2)').show();
+    }, 1350);
+
+    setTimeout(function () {
+      $('.column.left li:nth-child(3)').show();
+    }, 1000);
+
+    setTimeout(function () {
+      $('.column.left li:nth-child(4)').show();
+    }, 750);
+  } else {
+    $('#login > div').html($('#unauthorized').show());
+  }
+});
 
 var options = {
   markAsSecure: function () {
@@ -88,7 +106,7 @@ $('.alert button').click(function () {
   options.restore();
 });
 
-$(document).on('click', '.column.right li > button', function () {
+$(document).on('click', '.column.right li button', function () {
   $(this).parent().find('button').prop('disabled', true);
   $(this).addClass('selected');
   var activeOption = options[options.activeOptionID];
@@ -124,7 +142,7 @@ $(document).on('click', '.column.right li > button', function () {
     case 2: // Leak de info privada por JSONP
       switch (activeOption.status) {
         case 1:
-          activeOption.status = 2;
+          $(this).val() == 1 ? options.markAsVulnerable() : activeOption.status = 2;
           activeOption.$el.children().eq($(this).val()).show();
           break;
         case 2:
@@ -139,6 +157,46 @@ $(document).on('click', '.column.right li > button', function () {
 
       break;
     case 3: // Leak de info privada por JS
+      switch (activeOption.status) {
+        case 1:
+          $(this).val() == 1 ? options.markAsSecure() : activeOption.status = 2;
+          activeOption.$el.children().first().find('textarea').prop('disabled', true);
+          activeOption.$el.children().eq($(this).val()).show();
+          break;
+        case 2:
+          if ($(this).val() == 1) {
+            options.markAsVulnerable();
+            activeOption.$el.children().eq(3).show();
+          } else {
+            activeOption.status = 3;
+            activeOption.$el.children().eq(4).show();
+          }
+
+          break;
+        case 3:
+          if ($(this).val() == 1) options.markAsSecure();
+          else {
+            options.markAsVulnerable();
+            activeOption.$el.children().eq(3).insertAfter($(this).parent()).show();
+          }
+
+          break;
+      }
+
       break;
+  }
+});
+
+$(document).on('click', '.request > span:nth-child(1)', function () {
+  var $textarea = $(this).parent().find('textarea');
+
+  if ($textarea.is(':visible')) {
+    $(this).html('&#9654;');
+    $('.request > span:nth-child(2)').html('GET http://example.com/static/nonlib.js');
+    $textarea.hide();
+  } else {
+    $(this).html('&#9660;');
+    $('.request > span:nth-child(2)').html('GET /static/nonlib.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HTTP/1.1');
+    $textarea.show();
   }
 });

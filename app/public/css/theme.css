@@ -186,7 +186,7 @@ nav img {
   font-family: sans-serif;
   font-size: 12px;
   line-height: 16px;
-  padding: 20px 40px 10px 40px;
+  padding: 20px 25% 10px 40px;
 }
 
 .column.right li:first-child {
@@ -203,6 +203,61 @@ nav img {
 
 .column.right li button:last-child {
   margin-left: 10px;
+}
+
+.request {
+  background-color: #E1F5FE;
+  border-radius: 2px;
+  border: 1px solid #B3E5FC;
+  display: inline-block;
+  padding: 5px;
+}
+
+.request span {
+  line-height: 25px;
+}
+
+.request span:nth-child(2) {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.request button {
+  float: right;
+}
+
+.request button:nth-child(3) {
+  margin-left: 5px;
+}
+
+.request button:nth-child(4) {
+  margin-left: 10px;
+}
+
+.request textarea {
+  cursor: auto;
+  display: none;
+  margin-bottom: -4px;
+  margin-top: 5px;
+  width: calc(100% - 5px);
+}
+
+/* ---------- Unauthorized ---------- */
+
+#unauthorized {
+  color: rgb(34, 34, 34);
+  display: none;
+}
+
+#unauthorized i {
+  float: left;
+}
+
+#unauthorized span {
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 12px;
+  line-height: 24px;
+  margin-left: 5px;
 }
 
 /* ---------- General ---------- */
@@ -247,4 +302,8 @@ button.selected {
 
 .clear {
   clear: both;
+}
+
+.hide {
+  display: none;
 }
