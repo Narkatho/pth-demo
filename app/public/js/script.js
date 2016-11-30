@@ -41,15 +41,17 @@ $('#login button').click(function () {
 
 var options = {
   markAsSecure: function () {
-    $(`.column.left li[data-optionid="${this.activeOptionID}"] span`).css('left', 35);
+    $(`.column.left li[data-optionid="${this.activeOptionID}"] span`).css('left', 47);
     $(`.column.left li[data-optionid="${this.activeOptionID}"] i.secure`).show();
     this[this.activeOptionID].secure = true;
+    this[this.activeOptionID].$el.css('margin-top', 35);
     $('.alert.secure').show();
   },
   markAsVulnerable: function () {
-    $(`.column.left li[data-optionid="${this.activeOptionID}"] span`).css('left', 35);
+    $(`.column.left li[data-optionid="${this.activeOptionID}"] span`).css('left', 47);
     $(`.column.left li[data-optionid="${this.activeOptionID}"] i.vulnerable`).show();
     this[this.activeOptionID].vulnerable = true;
+    this[this.activeOptionID].$el.css('margin-top', 35);
     $('.alert.vulnerable').show();
   },
   restore: function () {
@@ -66,12 +68,13 @@ var options = {
       $('.alert.vulnerable').hide();
     }
 
+    this[this.activeOptionID].$el.css('margin-top', 0);
     activeOption.$el.html(activeOption.defaultHtml);
     activeOption.status = 1;
   }
 };
 
-$(document).on('click', '.column.left li:not(.selected):not(.disabled)', function () {
+$(document).on('click', '.column.left ul > li li:not(.selected):not(.disabled)', function () {
   $(this).addClass('selected');
 
   if (options.activeOptionID) {
@@ -109,10 +112,16 @@ $('.alert button').click(function () {
 $(document).on('click', '.column.right li button', function () {
   $(this).parent().find('button').prop('disabled', true);
   $(this).addClass('selected');
+  var $loader = $('<img src="img/rolling.svg"></img>');
+  $(this).parent().hasClass('request') ?
+    $(this).parent().parent().append($loader) :
+    $(this).parent().append($loader);
   var activeOption = options[options.activeOptionID];
   var self = this;
 
   setTimeout(function () {
+    $loader.remove();
+
     switch (options.activeOptionID) {
       case 1: // XXE
       case 4: // Detectar inyección CSV
